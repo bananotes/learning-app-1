@@ -1,78 +1,93 @@
-'use client';
+import mongoose from 'mongoose';
+import TopicModel, { ITopic } from '../models/Topic';
+import { TopicCard } from './TopicCard';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-interface Course {
-  id: string;
+// Define the type for raw MongoDB documents
+type RawTopic = {
+  _id: mongoose.Types.ObjectId;
   name: string;
-  description: string;
-  chaptersCount: number;
-  lastUpdated: string;
-  color: string;
+  summary: string;
+  chapters: mongoose.Types.ObjectId[];
+  authorId: mongoose.Types.ObjectId;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  __v: number;
+};
+
+async function getTopics() {
+  try {
+    const mongoUri = process.env.MONGODB_URI;
+
+    // 1. Force disconnect if connected
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
+
+    // 2. Create new connection
+    await mongoose.connect(mongoUri!);
+
+    // 3. Query with simplified options
+    const rawTopics = (await TopicModel.find({})
+      .sort({ updatedAt: -1 })
+      .setOptions({
+        cache: false,
+        lean: true,
+        maxTimeMS: 30000,
+      })
+      .select('-__v')
+      .exec()) as RawTopic[];
+
+    // 4. Transform data
+    const topics: ITopic[] = rawTopics.map(topic => ({
+      _id: topic._id,
+      name: topic.name,
+      summary: topic.summary,
+      chapters: topic.chapters,
+      authorId: topic.authorId,
+      createdAt: new Date(topic.createdAt),
+      updatedAt: new Date(topic.updatedAt),
+    }));
+
+    // 5. Disconnect after query
+    await mongoose.disconnect();
+
+    return topics;
+  } catch (error) {
+    console.error('Error fetching topics:', error);
+    throw error;
+  }
 }
 
-export function CourseGrid() {
-  const router = useRouter();
-  const [courses] = useState<Course[]>([
-    {
-      id: '1',
-      name: 'Computer Networks Fundamentals',
-      description: 'Deep dive into basic concepts, protocols, and applications of computer networks',
-      chaptersCount: 12,
-      lastUpdated: '2024-03-11',
-      color: 'bg-[#EEF2FF]',
-    },
-    {
-      id: '2',
-      name: 'Data Structures and Algorithms',
-      description: 'Master the principles and implementation of basic data structures and common algorithms',
-      chaptersCount: 15,
-      lastUpdated: '2024-03-10',
-      color: 'bg-[#FEF3C7]',
-    },
-    {
-      id: '3',
-      name: 'Operating Systems Principles',
-      description: 'Learn core concepts and implementation mechanisms of operating systems',
-      chaptersCount: 10,
-      lastUpdated: '2024-03-09',
-      color: 'bg-[#ECFDF5]',
-    },
-  ]);
+// 移除 'use client' 指令，使其成为服务器组件
+export async function CourseGrid() {
+  try {
+    const topics = await getTopics();
 
-  const handleCourseClick = (courseId: string) => {
-    router.push(`/course/${courseId}`);
-  };
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {courses.map(course => (
-        <div
-          key={course.id}
-          onClick={() => handleCourseClick(course.id)}
-          className="group bg-white rounded-xl transition-all duration-300
-                   hover:shadow-lg hover:shadow-gray-200/80
-                   border border-gray-200
-                   cursor-pointer transform hover:-translate-y-1">
-          {/* Course Header */}
-          <div className={`h-36 rounded-t-xl ${course.color} p-6`}>
-            <h3 className="text-lg font-semibold text-[#1A1C1E] mb-2">{course.name}</h3>
-            <p className="text-gray-700 text-sm line-clamp-2">{course.description}</p>
-          </div>
-
-          {/* Course Info */}
-          <div className="p-5 flex items-center justify-between text-sm border-t border-gray-100">
-            <span className="flex items-center text-gray-600">
-              <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              {course.chaptersCount} Chapters
-            </span>
-            <span className="text-xs text-gray-500">Updated on {course.lastUpdated}</span>
-          </div>
+    if (!topics || topics.length === 0) {
+      return (
+        <div className="p-4 text-center">
+          <p className="text-gray-500">No topics found in database</p>
         </div>
-      ))}
-    </div>
-  );
+      );
+    }
+
+    return (
+      <>
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">Found {topics.length} topics</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {topics.map(topic => (
+            <TopicCard key={topic._id.toString()} topic={topic} />
+          ))}
+        </div>
+      </>
+    );
+  } catch (error) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        <p>Error loading topics: {(error as Error).message}</p>
+      </div>
+    );
+  }
 }
