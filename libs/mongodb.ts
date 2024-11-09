@@ -11,7 +11,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-interface GlobalWithMongoose {
+export interface GlobalWithMongoose {
   mongoose: {
     conn: typeof mongoose | null;
     promise: Promise<typeof mongoose> | null;
@@ -47,3 +47,7 @@ async function connect() {
 }
 
 export default connect;
+
+export function getMongoDbClient() {
+  return global.mongoose.conn?.connection.getClient();
+}

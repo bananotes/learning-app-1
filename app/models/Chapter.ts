@@ -16,4 +16,4 @@ const chapterSchema = new mongoose.Schema({
   cards: { type: mongoose.Schema.Types.Mixed },
 }, { timestamps: true });
 
-export default mongoose.models.Chapter || mongoose.model<IChapter>('Chapter', chapterSchema);
+export default mongoose.models?.Chapter || mongoose.model<IChapter>('Chapter', chapterSchema);

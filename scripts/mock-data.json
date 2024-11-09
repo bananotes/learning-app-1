@@ -1,0 +1,189 @@
+{
+  "users": [
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f51111"},
+      "name": "Demo User",
+      "email": "demo@example.com",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=demo",
+      "topics": [
+        {"$oid": "65f91c0e9a5d189b92f52001"},
+        {"$oid": "65f91c0e9a5d189b92f52002"},
+        {"$oid": "65f91c0e9a5d189b92f52003"},
+        {"$oid": "65f91c0e9a5d189b92f52004"},
+        {"$oid": "65f91c0e9a5d189b92f52005"}
+      ],
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    }
+  ],
+  "topics": [
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f52001"},
+      "name": "JavaScript Fundamentals",
+      "summary": "Learn core concepts and basics of JavaScript programming language from scratch",
+      "chapters": [
+        {"$oid": "65f91c0e9a5d189b92f53001"},
+        {"$oid": "65f91c0e9a5d189b92f53002"}
+      ],
+      "authorId": {"$oid": "65f91c0e9a5d189b92f51111"},
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f52002"},
+      "name": "React Development Guide",
+      "summary": "Comprehensive tutorial covering React components, hooks, and state management",
+      "chapters": [
+        {"$oid": "65f91c0e9a5d189b92f53003"},
+        {"$oid": "65f91c0e9a5d189b92f53004"}
+      ],
+      "authorId": {"$oid": "65f91c0e9a5d189b92f51111"},
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f52003"},
+      "name": "Node.js Backend Development",
+      "summary": "Master server-side JavaScript with Node.js, Express, and MongoDB",
+      "chapters": [
+        {"$oid": "65f91c0e9a5d189b92f53005"},
+        {"$oid": "65f91c0e9a5d189b92f53006"}
+      ],
+      "authorId": {"$oid": "65f91c0e9a5d189b92f51111"},
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    }
+  ],
+  "chapters": [
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53001"},
+      "name": "Chapter 1: JavaScript Fundamentals",
+      "summary": "Introduction to basic concepts and core syntax of JavaScript",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52001"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What is Hoisting in JavaScript?",
+          "answer": "Hoisting is JavaScript's behavior of moving variable declarations to the top of their scope."
+        },
+        "card2": {
+          "id": "2",
+          "question": "Explain the concept of Closure",
+          "answer": "A closure is the ability of a function to access variables in its outer (enclosing) scope."
+        },
+        "card3": {
+          "id": "3",
+          "question": "What is the prototype chain?",
+          "answer": "The prototype chain is JavaScript's mechanism for implementing object inheritance."
+        },
+        "card4": {
+          "id": "4",
+          "question": "How do you create a class?",
+          "answer": "Classes can be created using either the class keyword or constructor function syntax."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53002"},
+      "name": "Chapter 2: Advanced JavaScript",
+      "summary": "Deep dive into advanced JavaScript concepts and patterns",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52001"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What are JavaScript Promises?",
+          "answer": "Promises are objects representing the eventual completion or failure of an asynchronous operation."
+        },
+        "card2": {
+          "id": "2",
+          "question": "Explain async/await",
+          "answer": "async/await is syntactic sugar for Promises that makes asynchronous code look synchronous."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53003"},
+      "name": "Chapter 1: React Basics",
+      "summary": "Introduction to React components and JSX",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52002"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What is JSX?",
+          "answer": "JSX is a syntax extension for JavaScript that allows you to write HTML-like code in your JavaScript files."
+        },
+        "card2": {
+          "id": "2",
+          "question": "What are React components?",
+          "answer": "Components are reusable, self-contained pieces of code that return React elements to be rendered to the page."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53004"},
+      "name": "Chapter 2: React Hooks",
+      "summary": "Understanding and implementing React Hooks",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52002"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What is useState?",
+          "answer": "useState is a Hook that allows you to add state to functional components."
+        },
+        "card2": {
+          "id": "2",
+          "question": "What is useEffect?",
+          "answer": "useEffect is a Hook that lets you perform side effects in function components."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53005"},
+      "name": "Chapter 1: Node.js Fundamentals",
+      "summary": "Getting started with Node.js and Express",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52003"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What is Node.js?",
+          "answer": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine for building scalable network applications."
+        },
+        "card2": {
+          "id": "2",
+          "question": "What is Express?",
+          "answer": "Express is a minimal and flexible Node.js web application framework that provides a robust set of features."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    },
+    {
+      "_id": {"$oid": "65f91c0e9a5d189b92f53006"},
+      "name": "Chapter 2: MongoDB Integration",
+      "summary": "Working with MongoDB in Node.js applications",
+      "topicId": {"$oid": "65f91c0e9a5d189b92f52003"},
+      "cards": {
+        "card1": {
+          "id": "1",
+          "question": "What is Mongoose?",
+          "answer": "Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js."
+        },
+        "card2": {
+          "id": "2",
+          "question": "What are MongoDB indexes?",
+          "answer": "Indexes support the efficient execution of queries in MongoDB by reducing the number of documents to scan."
+        }
+      },
+      "createdAt": {"$date": "2024-03-19T00:00:00Z"},
+      "updatedAt": {"$date": "2024-03-19T00:00:00Z"}
+    }
+  ]
+}

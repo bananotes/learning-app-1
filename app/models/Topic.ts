@@ -16,4 +16,4 @@ const topicSchema = new mongoose.Schema({
   authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
-export default mongoose.models.Topic || mongoose.model<ITopic>('Topic', topicSchema);
+export default mongoose.models?.Topic || mongoose.model<ITopic>('Topic', topicSchema);
