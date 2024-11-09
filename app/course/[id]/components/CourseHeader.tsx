@@ -12,12 +12,12 @@ export default function CourseHeader({ course }: CourseHeaderProps) {
         <button
           className="px-4 py-2 bg-[#F97316] text-white rounded-lg text-sm
                          hover:bg-[#EA580C] transition-colors duration-200">
-          开始学习
+          Start Learning
         </button>
         <button
           className="px-4 py-2 text-gray-700 hover:text-gray-900 text-sm
                          hover:bg-gray-50 rounded-lg transition-colors duration-200">
-          编辑课程
+          Edit Course
         </button>
       </div>
     </div>

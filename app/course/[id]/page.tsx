@@ -22,16 +22,16 @@ interface Card {
   answer: string;
 }
 
-// 模拟数据
+// Mock data
 const mockCourse: Course = {
   id: '1',
-  name: '人工智能基础课程',
+  name: 'Artificial Intelligence Fundamentals',
   chapters: [
-    { id: 'ch1', name: '第一章：人工智能导论' },
-    { id: 'ch2', name: '第二章：机器学习基础' },
-    { id: 'ch3', name: '第三章：深度学习入门' },
-    { id: 'ch4', name: '第四章：神经网络原理' },
-    { id: 'ch5', name: '第五章：计算机视觉' },
+    { id: 'ch1', name: 'Chapter 1: Introduction to AI' },
+    { id: 'ch2', name: 'Chapter 2: Machine Learning Basics' },
+    { id: 'ch3', name: 'Chapter 3: Introduction to Deep Learning' },
+    { id: 'ch4', name: 'Chapter 4: Neural Network Principles' },
+    { id: 'ch5', name: 'Chapter 5: Computer Vision' },
   ],
 };
 
@@ -53,13 +53,15 @@ const mockCards: Card[] = [
   },
   {
     id: 'card4',
-    question: '什么是机器学习？',
-    answer: '机器学习是人工智能的一个子领域，它使计算机系统能够通过经验自动改进其性能',
+    question: 'What is machine learning?',
+    answer:
+      'Machine learning is a subset of AI that enables computer systems to automatically improve their performance through experience',
   },
   {
     id: 'card5',
-    question: '深度学习与传统机器学习的区别是什么？',
-    answer: '深度学习使用多层神经网络自动学习特征，而传统机器学习通常需要手动特征工程',
+    question: 'What is the difference between deep learning and traditional machine learning?',
+    answer:
+      'Deep learning uses multi-layer neural networks to learn features automatically, while traditional machine learning usually requires manual feature engineering',
   },
 ];
 
@@ -69,13 +71,13 @@ export default function CoursePage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 模拟 API 请求延迟
+    // Simulate API request delay
     const fetchCourseData = async () => {
       try {
-        // 模拟 API 调用延迟
+        // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        // 使用模拟数据
+        // Use mock data
         setCourse(mockCourse);
         setCards(mockCards);
       } catch (error) {
@@ -91,17 +93,17 @@ export default function CoursePage({ params }: { params: { id: string } }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F0F2F5] flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+        <div className="text-gray-500">Loading...</div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex">
-      {/* 左侧边栏 */}
+      {/* Left sidebar */}
       <Sidebar course={course} />
 
-      {/* 主要内容区域 */}
+      {/* Main content area */}
       <div className="flex-1 overflow-auto">
         <div className="container mx-auto px-6 py-8">
           <CourseHeader course={course} />

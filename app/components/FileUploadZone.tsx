@@ -44,7 +44,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
   const handleFileUpload = async (file: File) => {
     if (file.type !== 'application/pdf') {
-      alert('请上传PDF文件');
+      alert('Please upload a PDF file');
       return;
     }
 
@@ -72,7 +72,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       onUploadSuccess?.(data);
     } catch (error) {
       console.error('Upload error:', error);
-      alert('上传失败，请重试');
+      alert('Upload failed, please try again');
     } finally {
       setIsUploading(false);
     }
@@ -104,9 +104,9 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
                 />
               </svg>
             </div>
-            <p className="text-gray-600 mb-2">拖放PDF文件到这里或者</p>
+            <p className="text-gray-600 mb-2">Drag and drop PDF file here or</p>
             <label htmlFor="fileInput" className="cursor-pointer text-[#F97316] hover:text-[#EA580C]">
-              点击上传
+              click to upload
             </label>
             <button
               className="ml-4 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
@@ -114,7 +114,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
                 setUploadedFileId('test-file-id');
                 setShowSuccessModal(true);
               }}>
-              测试上传成功
+              Test Upload Success
             </button>
           </div>
 
