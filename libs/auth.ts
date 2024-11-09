@@ -26,7 +26,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user: rawUser }) {
-      const user = {...rawUser};
+      const user = { ...rawUser };
       if (process.env.NODE_ENV !== 'production') {
         user.email = 'test@bananotes.com';
         user.name = 'Test User';

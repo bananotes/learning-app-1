@@ -1,13 +1,40 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
+
+const fetchTopicName = async (topicId: string) =>{
+  console.log('fetchTopicName', topicId);
+  if (topicId) {
+    try {
+      const response = await fetch(`/api/topicName/${topicId}`);
+      if (response.ok) {
+        const topicName: string = await response.json();
+        return topicName;
+      }
+    } catch (error) {
+      console.error('Error fetching topic:', error);
+    }
+  }
+};
+
+const DEFAULT_TITLE = 'Welcome to Bananotes Learning';
 
 const Title: FC = () => {
   const params = useParams();
-  // TODO: fix the topic id
-  const topicName = params?.topicId || 'Welcome to Bananotes Learning';
+  const pathname = usePathname();
+  const [topicName, setTopicName] = useState('');
+  const isInTopicPage = pathname.includes('/course/');
+  console.log('isInTopicPage', isInTopicPage);
+  useEffect(() => {
+    if (isInTopicPage) {
+      fetchTopicName(params.id as string).then((name) => {
+        if (name) setTopicName(name);
+        else setTopicName(DEFAULT_TITLE);
+      });
+    }
+  }, [isInTopicPage, params.id]);
 
   return (
     <Link 

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import './Chapter';
 
 export interface ITopic {
   name: string;
