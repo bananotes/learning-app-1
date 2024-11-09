@@ -3,33 +3,14 @@
 const mongoose = require('mongoose');
 const { config } = require('dotenv');
 const path = require('path');
+const userSchema = require('../app/models/User').default;
+const topicSchema = require('../app/models/Topic').default;
+const chapterSchema = require('../app/models/Chapter').default;
 
 // Load environment variables
 config({ 
   path: path.resolve(process.cwd(), '.env.local'),
 });
-
-// Define Schemas
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  avatar: String,
-  topics: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Topic' }],
-}, { timestamps: true });
-
-const topicSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  summary: { type: String, required: true },
-  chapters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chapter' }],
-  authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-}, { timestamps: true });
-
-const chapterSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  summary: { type: String, required: true },
-  topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
-  cards: { type: mongoose.Schema.Types.Mixed },
-}, { timestamps: true });
 
 async function initDatabase() {
   const uri = process.env.MONGODB_URI;
