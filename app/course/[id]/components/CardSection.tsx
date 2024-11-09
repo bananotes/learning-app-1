@@ -12,7 +12,7 @@ export default function CardSection({ cards }: CardSectionProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-[#1A1C1E]">学习卡片</h2>
+        <h2 className="text-xl font-semibold text-[#1A1C1E]">Study Cards</h2>
         <div className="flex gap-2">
           <button
             className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800

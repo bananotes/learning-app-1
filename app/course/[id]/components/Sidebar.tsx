@@ -21,34 +21,33 @@ export default function Sidebar({ course }: SidebarProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
 
-  //
   const handleEdit = async (chapterId: string, newName: string) => {
     try {
-      // 检查新名称是否为空
+      // Check if new name is empty
       if (!newName.trim()) {
         return;
       }
 
-      // 模拟 API 调用延迟
+      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // TODO: 实际项目中替换为真实的 API 调用
+      // TODO: Replace with actual API call in production
       console.log(`Updating chapter ${chapterId} with new name: ${newName}`);
 
       setEditingId(null);
-      // 这里可以添加成功提示或刷新数据的逻辑
+      // Add success notification or data refresh logic here
     } catch (error) {
       console.error('Error updating chapter name:', error);
-      // 这里可以添加错误提示
+      // Add error notification here
     }
   };
 
-  // 如果 course 为空，显示加载状态
+  // Show loading state if course is null
   if (!course) {
     return (
       <div className="w-64 bg-white border-r border-gray-200 p-4">
-        <h2 className="text-lg font-semibold text-[#1A1C1E] mb-4">课程章节</h2>
-        <div className="text-gray-500 text-sm">加载中...</div>
+        <h2 className="text-lg font-semibold text-[#1A1C1E] mb-4">Course Chapters</h2>
+        <div className="text-gray-500 text-sm">Loading...</div>
       </div>
     );
   }
@@ -57,18 +56,18 @@ export default function Sidebar({ course }: SidebarProps) {
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto">
-      <h2 className="text-lg font-semibold text-[#1A1C1E] mb-4">课程章节</h2>
+      <h2 className="text-lg font-semibold text-[#1A1C1E] mb-4">Course Chapters</h2>
 
-      {/* 添加章节按钮 */}
+      {/* Add Chapter Button */}
       <button
         className="w-full mb-4 px-4 py-2 text-sm text-[#F97316] border border-[#F97316] 
                    rounded-lg hover:bg-[#F97316]/5 transition-colors duration-200">
-        + 添加章节
+        + Add Chapter
       </button>
 
-      {/* 章节列表 */}
+      {/* Chapter List */}
       {chapters.length === 0 ? (
-        <div className="text-gray-500 text-sm">暂无章节</div>
+        <div className="text-gray-500 text-sm">No chapters yet</div>
       ) : (
         <ul className="space-y-2">
           {chapters.map(chapter => (
@@ -93,7 +92,7 @@ export default function Sidebar({ course }: SidebarProps) {
                   <button
                     onClick={() => handleEdit(chapter.id, editingName)}
                     className="text-sm text-[#F97316] hover:text-[#EA580C]">
-                    保存
+                    Save
                   </button>
                 </div>
               ) : (
@@ -109,12 +108,12 @@ export default function Sidebar({ course }: SidebarProps) {
                       }}
                       className="text-gray-400 hover:text-gray-600 
                                transition-colors duration-200">
-                      编辑
+                      Edit
                     </button>
                     <button
                       className="text-red-400 hover:text-red-600 
                                transition-colors duration-200">
-                      删除
+                      Delete
                     </button>
                   </div>
                 </div>
