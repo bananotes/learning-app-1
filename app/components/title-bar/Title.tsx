@@ -31,6 +31,8 @@ const Title: FC = () => {
         if (name) setTopicName(name);
         else setTopicName(DEFAULT_TITLE);
       });
+    } else {
+      setTopicName(DEFAULT_TITLE);
     }
   }, [isInTopicPage, params.id]);
 

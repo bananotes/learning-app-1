@@ -131,7 +131,10 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
       <UploadSuccessModal
         isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
+        onClose={() => {
+          setShowSuccessModal(false);
+          location.reload();
+        }}
         fileId={uploadedFileId}
       />
     </>

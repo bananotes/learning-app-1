@@ -13,11 +13,11 @@ interface UploadSuccessModalProps {
   fileId: string;
 }
 
-export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessModalProps) {
+export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps) {
   const [mode, setMode] = useState<'existing' | 'new'>('existing');
   const [selectedTopicId, setSelectedTopicId] = useState('');
   const [newTopicName, setNewTopicName] = useState('');
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [topics, setTopics] = useState<(Topic & { _id: string })[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -25,8 +25,8 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
     const fetchTopics = async () => {
       try {
         const response = await fetch('/api/topics');
-        const data = await response.json();
-        setTopics(data.topics || []);
+        const topics = await response.json();
+        setTopics(topics || []);
       } catch (error) {
         console.error('Failed to fetch topics:', error);
         setTopics([]);
@@ -43,12 +43,16 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
     try {
       if (mode === 'existing') {
         // TODO: Add to existing topic
-        const response = await fetch(`/api/chapter/${selectedTopicId}`, {
-          method: 'PATCH',
+        const response = await fetch(`/api/topic/${selectedTopicId}/chapter`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ topicId: selectedTopicId }),
+          body: JSON.stringify({
+            name: 'New Chapter',
+            summary: 'New chapter!!!!',
+            cards: [{ id: 'dadfaf', question: 'Front', answer: 'Back' }, { id: 'dadffdaaf', question: 'Fronfdafast', answer: 'fafaBack' }],
+          }),
         });
 
         if (!response.ok) throw new Error('Failed to add new chapter to topic');
@@ -61,7 +65,12 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
           },
           body: JSON.stringify({
             name: newTopicName,
-            fileId,
+            summary: 'New topic!!!!',
+            chapters: [{
+              name: 'New Chapter',
+              summary: 'New chapter!!!!',
+              cards: [{ id: 'dadfaf', question: 'Front', answer: 'Back' }, { id: 'dadffdaaf', question: 'Fronfdafast', answer: 'fafaBack' }],
+            }],
           }),
         });
 
@@ -112,7 +121,7 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
                 <option value="">Select Topic...</option>
                 {Array.isArray(topics) &&
                   topics.map(topic => (
-                    <option key={topic.id} value={topic.id}>
+                    <option key={topic._id} value={topic._id}>
                       {topic.name}
                     </option>
                   ))}
