@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { IChapter } from '../models/Chapter';
+import { useRouter } from 'next/navigation';
 
 interface Topic {
   id: string;
@@ -17,6 +18,7 @@ interface UploadSuccessModalProps {
 }
 
 export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterData }: UploadSuccessModalProps) {
+  const router = useRouter();
   const [mode, setMode] = useState<'existing' | 'new'>('existing');
   const [selectedTopicId, setSelectedTopicId] = useState('');
   const [newTopicName, setNewTopicName] = useState('');
@@ -70,6 +72,9 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
         });
 
         if (!response.ok) throw new Error('Failed to create a new topic');
+        const resData = await response.json();
+        console.log('New topic created:', resData);
+        router.push(`/topic/${resData.topicId}`);
       }
       onClose();
     } catch (error) {

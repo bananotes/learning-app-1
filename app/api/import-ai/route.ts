@@ -42,9 +42,9 @@ export const POST = auth(async function POST(req) {
 
 1. A suitable title within 10 words
 2. A 3-sentence summary
-3. as many as possible key points organized in Q&A format
+3. as much as possible (best for 7 to 14) most important key points organized in Q&A format
 
-The output should follow this JSON format in one line, do not break line: {"name": "/* title */", "summary": "/*summary*/", cards: [{"id": "/* a serial number */","question":"/* Q, should be very clear */", "answer": "/*A, no more than 20 words this part*/"}, {...}, ...]}`,
+The output should follow this JSON format in one line, do not break line: {"name": "/* title */", "summary": "/*summary*/", cards: [{"id": "/* a serial number */","question":"/* Q, should be very clear */", "answer": "/*A, no more than 20 words this part*/"}]}`,
               },
               {
                 type: 'file',

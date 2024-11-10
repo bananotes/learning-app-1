@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react';
 import ChapterList from './ChapterList';
-import { IChapter } from '@/app/models/Chapter';
 import { useParams } from 'next/navigation';
 
 interface Course {
@@ -28,7 +27,6 @@ interface SidebarProps {
 
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
   const { id: selectedTopicId } = useParams();
-  const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,14 +52,13 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
       if (!response.ok) throw new Error('Upload failed');
 
       const data = await response.json();
-      setNewChapterData(data);
       // Add to existing topic
       const updateResponse = await fetch(`/api/topic/${selectedTopicId}/chapter`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newChapterData),
+        body: data,
       });
       setIsUploading(false);
       if (!updateResponse.ok) throw new Error('Failed to add new chapter to topic');

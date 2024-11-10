@@ -27,8 +27,8 @@ export async function POST(
       console.log(user.topics, topicId);
       return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     }
-    const newChapterData = JSON.parse(await req.json());
-    console.log('New chapter data:', newChapterData.summary, newChapterData.name);
+    const rawReqData = await req.text();
+    const newChapterData = JSON.parse(rawReqData);
     const chapter = new Chapter({
       name: newChapterData.name,
       summary: newChapterData.summary,
