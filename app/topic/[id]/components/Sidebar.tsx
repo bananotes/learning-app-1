@@ -10,6 +10,7 @@ interface Course {
   chapters: {
     id: string;
     name: string;
+    summary: string;
     cards: {
       id: string;
       question: string;
@@ -18,7 +19,13 @@ interface Course {
   }[];
 }
 
-export default function Sidebar({ course }: { course: Course }) {
+interface SidebarProps {
+  course: Course;
+  selectedChapterId: string | null;
+  onChapterSelect: (chapterId: string | null) => void;
+}
+
+export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedFileId, setUploadedFileId] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -56,10 +63,46 @@ export default function Sidebar({ course }: { course: Course }) {
     }
   };
 
+  const handleRenameChapter = async (chapterId: string, newName: string) => {
+    try {
+      const response = await fetch(`/api/chapters/${chapterId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newName }),
+      });
+
+      if (!response.ok) throw new Error('Failed to rename chapter');
+
+      // You'll need to implement a way to refresh the course data here
+      // This could be through a router refresh or state management
+    } catch (error) {
+      console.error('Error renaming chapter:', error);
+      alert('Failed to rename chapter. Please try again.');
+    }
+  };
+
+  const handleDeleteChapter = async (chapterId: string) => {
+    try {
+      const response = await fetch(`/api/chapters/${chapterId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete chapter');
+
+      // You'll need to implement a way to refresh the course data here
+      // This could be through a router refresh or state management
+    } catch (error) {
+      console.error('Error deleting chapter:', error);
+      alert('Failed to delete chapter. Please try again.');
+    }
+  };
+
   return (
     <aside className="w-80 bg-white border-r border-gray-200 p-6">
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-[#1A1C1E] mb-2">{course.name}</h2>
+      <div className="mb-8 text-center">
+        {/* TODO: Add course name */}
         <p className="text-sm text-gray-600">
           {course.chapters.length} {course.chapters.length === 1 ? 'Chapter' : 'Chapters'}
         </p>
@@ -74,7 +117,13 @@ export default function Sidebar({ course }: { course: Course }) {
         + Add Chapter
       </button>
 
-      <ChapterList chapters={course.chapters} />
+      <ChapterList
+        chapters={course.chapters}
+        selectedChapterId={selectedChapterId}
+        onChapterSelect={onChapterSelect}
+        onRename={handleRenameChapter}
+        onDelete={handleDeleteChapter}
+      />
 
       <UploadSuccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} fileId={uploadedFileId} />
     </aside>
