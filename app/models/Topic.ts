@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import './Chapter';
 
 export interface ITopic {
-  _id: mongoose.Types.ObjectId;
   name: string;
   summary: string;
   chapters: mongoose.Types.ObjectId[];
