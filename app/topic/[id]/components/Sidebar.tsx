@@ -112,7 +112,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
   };
 
   return (
-    <aside className="w-80 bg-white border-r border-gray-200 p-6">
+    <aside className="max-h-[calc(100vh-64px)] w-80 bg-white border-r border-gray-200 p-6 overflow-scroll">
       <div className="mb-8 text-center">
         {/* TODO: Add course name */}
         <p className="text-sm text-gray-600">

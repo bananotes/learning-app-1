@@ -51,7 +51,7 @@ export default function TopicContent({ course }: TopicContentProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-[calc(100vh-64px)] bg-gray-50">
       {/* 侧边栏切换按钮 */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
