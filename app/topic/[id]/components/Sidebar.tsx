@@ -63,11 +63,11 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         body: data,
       });
       setIsUploading(false);
-      
+
       if (!updateResponse.ok) {
         throw new Error('Failed to add new chapter to topic');
       }
-      
+
       toast({
         title: 'Success!',
         description: 'New chapter has been added to your topic.',
@@ -75,7 +75,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         className: 'bg-[#F97316] text-white',
         duration: 3000,
       });
-
     } catch (error) {
       console.error('Error uploading file:', error);
       toast({
@@ -106,11 +105,23 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       if (!response.ok) throw new Error('Failed to rename chapter');
 
-      // You'll need to implement a way to refresh the course data here
-      // This could be through a router refresh or state management
+      // 重新加载页面以获取最新数据
+      location.reload();
+
+      toast({
+        title: 'Success!',
+        description: 'Chapter name has been updated.',
+        variant: 'default',
+        className: 'bg-[#F97316] text-white',
+        duration: 3000,
+      });
     } catch (error) {
       console.error('Error renaming chapter:', error);
-      alert('Failed to rename chapter. Please try again.');
+      toast({
+        title: 'Error',
+        description: 'Failed to rename chapter. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -122,11 +133,23 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       if (!response.ok) throw new Error('Failed to delete chapter');
 
-      // You'll need to implement a way to refresh the course data here
-      // This could be through a router refresh or state management
+      // 重新加载页面以获取最新数据
+      location.reload();
+
+      toast({
+        title: 'Success!',
+        description: 'Chapter has been deleted.',
+        variant: 'default',
+        className: 'bg-[#F97316] text-white',
+        duration: 3000,
+      });
     } catch (error) {
       console.error('Error deleting chapter:', error);
-      alert('Failed to delete chapter. Please try again.');
+      toast({
+        title: 'Error',
+        description: 'Failed to delete chapter. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -145,11 +168,11 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         onClick={handleAddChapter}
         disabled={isUploading}
         className={`w-full mb-4 px-4 py-2 text-sm border rounded-lg
-    ${isUploading 
-      ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse' 
+    ${
+    isUploading
+      ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
       : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
-    }`}
-      >
+    }`}>
         {isUploading ? 'Adding Chapter...' : '+ Add Chapter'}
       </button>
 
