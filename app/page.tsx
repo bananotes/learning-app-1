@@ -9,8 +9,8 @@ export default function Home() {
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-6 py-5">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-[#1A1C1E] font-serif">PDF Processor</h1>
-            <p className="text-gray-600 text-base mt-2 font-sans">Easily manage your study materials</p>
+            <h1 className="text-3xl font-bold text-[#1A1C1E] font-serif">Flipping World</h1>
+            <p className="text-gray-600 text-base mt-2 font-sans">Flipping, Flipping and Flipping!</p>
           </div>
         </div>
       </div>
@@ -19,13 +19,13 @@ export default function Home() {
       <div className="container mx-auto px-6 py-10">
         {/* File Upload Area */}
         <div className="mb-12 text-center">
-          <h2 className="text-2xl font-semibold mb-4 text-[#1A1C1E] font-serif">Upload New File</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-[#1A1C1E] font-serif">Upload Your World</h2>
           <FileUploadZone />
         </div>
 
         {/* Course List */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-6 text-[#1A1C1E] font-serif">Topic List</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-[#1A1C1E] font-serif">Collection Gallery</h2>
           <CourseGrid />
         </div>
       </div>
