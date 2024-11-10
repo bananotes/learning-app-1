@@ -98,7 +98,13 @@ export default function TopicContent({ course }: TopicContentProps) {
                 ${isChanging ? (direction === 'left' ? '-translate-x-full opacity-0' : 'translate-x-full opacity-0') : 'translate-x-0 opacity-100'}
               `}>
               {selectedChapter ? (
-                <CardSection cards={selectedChapter.cards} />
+                <CardSection
+                  cards={selectedChapter.cards}
+                  chapter={{
+                    name: selectedChapter.name,
+                    summary: selectedChapter.summary,
+                  }}
+                />
               ) : (
                 <div className="text-center py-12">
                   <p className="text-gray-500">No cards available</p>

@@ -3,11 +3,15 @@
 import { IChapter } from '@/app/models/Chapter';
 import { useState, useEffect } from 'react';
 
-type CardSectionProps = {
+interface CardSectionProps {
   cards: IChapter['cards'];
-};
+  chapter: {
+    name: string;
+    summary: string;
+  };
+}
 
-export default function CardSection({ cards = [] }: CardSectionProps) {
+export default function CardSection({ cards = [], chapter }: CardSectionProps) {
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const [isFlipping, setIsFlipping] = useState(false);
   const cardList = Array.isArray(cards) ? cards : [];
@@ -29,8 +33,14 @@ export default function CardSection({ cards = [] }: CardSectionProps) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-serif text-[#1A1C1E]">Study Cards</h2>
+      <div className="flex flex-col space-y-2 mb-8">
+        <h3 className="text-lg font-medium text-gray-600">{chapter.name}</h3>
+        <h2
+          className={`font-serif text-[#1A1C1E] ${
+            chapter.summary.length > 100 ? 'text-xl' : 'text-2xl'
+          } leading-relaxed`}>
+          {chapter.summary}
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
