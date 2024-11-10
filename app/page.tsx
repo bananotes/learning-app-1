@@ -25,7 +25,7 @@ export default function Home() {
 
         {/* Course List */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-6 text-[#1A1C1E] font-serif">Course List</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-[#1A1C1E] font-serif">Topic List</h2>
           <CourseGrid />
         </div>
       </div>
