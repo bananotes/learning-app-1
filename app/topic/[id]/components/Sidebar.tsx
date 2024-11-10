@@ -73,7 +73,8 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         description: 'New chapter has been added to your topic.',
         variant: 'default',
         className: 'bg-[#F97316] text-white',
-        duration: 3000,
+        duration: 1000,
+        
       });
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -81,7 +82,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         title: 'Error',
         description: 'Failed to upload file. Please try again.',
         variant: 'destructive',
-        duration: 3000,
+        duration: 1000,
       });
     }
 
@@ -90,7 +91,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
       fileInputRef.current.value = '';
     }
     setIsUploading(false);
-    location.reload();
+    setTimeout(() => location.reload(), 1000);
   };
 
   const handleRenameChapter = async (chapterId: string, newName: string) => {
@@ -203,11 +204,10 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
           onClick={handleAddChapter}
           disabled={isUploading}
           className={`w-full mb-4 px-4 py-2 text-sm border rounded-lg
-            ${
-              isUploading
-                ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
-                : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
-            }`}>
+            ${isUploading
+      ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
+      : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
+    }`}>
           {isUploading ? 'Adding Chapter...' : '+ Add Chapter'}
         </button>
       </div>
