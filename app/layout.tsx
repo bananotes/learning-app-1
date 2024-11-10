@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import TitleBar from '@/app/components/title-bar/TitleBar';
+import { Toaster } from '@/app/components/ui/toaster';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
             {children}
           </main>
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { UploadSuccessModal } from './UploadSuccessModal';
 import { IChapter } from '../models/Chapter';
 import { useSession } from 'next-auth/react';
+import { useToast } from '@/hooks/use-toast';
 
 interface Props {
   onUploadSuccess?: (file: { id: string; filename: string; url: string }) => void;
@@ -39,8 +40,20 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
     }
   };
 
+  const { toast } = useToast();
+
   const handleAddChapter = () => {
     if (isUploading) return;
+    if (!session?.user && location.hostname !== 'localhost') {
+      console.log('toast,here');
+      toast({
+        title: 'Not logged in',
+        description: 'Please sign in to upload files',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
     fileInputRef.current?.click();
   };
 
@@ -105,7 +118,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}>
-          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading || !session?.user} />
+          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading || (!session?.user && location.hostname !== 'localhost')} />
 
           <div className="text-center">
             <div className="mb-4">
