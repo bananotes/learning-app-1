@@ -14,7 +14,6 @@ async function getTopicWithChapters(id: string): Promise<ITopicWithChapters | nu
     await connect();
     const topic = await Topic.findById(id).populate('chapters');
     if (!topic) notFound();
-    console.log('topic', topic);
     return JSON.parse(JSON.stringify(topic));
   } catch (error) {
     console.error('Error fetching topic:', error);
@@ -31,6 +30,7 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
     chapters: topic!.chapters.map(chapter => ({
       id: chapter._id,
       name: chapter.name,
+      cards: chapter.cards,
     })),
   };
 
