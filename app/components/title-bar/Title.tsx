@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
 const fetchTopicName = async (topicId: string) =>{
-  console.log('fetchTopicName', topicId);
   if (topicId) {
     try {
       const response = await fetch(`/api/topicName/${topicId}`);

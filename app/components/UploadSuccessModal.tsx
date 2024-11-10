@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-interface Chapter {
+interface Topic {
   id: string;
   name: string;
 }
@@ -15,26 +15,26 @@ interface UploadSuccessModalProps {
 
 export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessModalProps) {
   const [mode, setMode] = useState<'existing' | 'new'>('existing');
-  const [selectedChapterId, setSelectedChapterId] = useState('');
-  const [newChapterName, setNewChapterName] = useState('');
-  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [selectedTopicId, setSelectedTopicId] = useState('');
+  const [newTopicName, setNewTopicName] = useState('');
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Fetch existing chapters
-    const fetchChapters = async () => {
+    // Fetch existing topics
+    const fetchTopics = async () => {
       try {
-        const response = await fetch('/api/chapter');
+        const response = await fetch('/api/topics');
         const data = await response.json();
-        setChapters(data.chapters || []);
+        setTopics(data.topics || []);
       } catch (error) {
-        console.error('Failed to fetch chapters:', error);
-        setChapters([]);
+        console.error('Failed to fetch topics:', error);
+        setTopics([]);
       }
     };
 
     if (isOpen) {
-      fetchChapters();
+      fetchTopics();
     }
   }, [isOpen]);
 
@@ -42,33 +42,31 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
     setIsSubmitting(true);
     try {
       if (mode === 'existing') {
-        // Add to existing chapter
-        const response = await fetch(`/api/chapter/${selectedChapterId}/files`, {
-          method: 'POST',
+        // TODO: Add to existing topic
+        const response = await fetch(`/api/chapter/${selectedTopicId}`, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ fileId }),
+          body: JSON.stringify({ topicId: selectedTopicId }),
         });
 
-        if (!response.ok) throw new Error('Failed to add file to chapter');
+        if (!response.ok) throw new Error('Failed to add new chapter to topic');
       } else {
-        // Create new chapter and add file
-        const response = await fetch('/api/chapter', {
+        // TODO: Create new topic and add file
+        const response = await fetch('/api/topic', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: newChapterName,
+            name: newTopicName,
             fileId,
           }),
         });
 
-        if (!response.ok) throw new Error('Failed to create chapter');
+        if (!response.ok) throw new Error('Failed to create a new topic');
       }
-
-      alert('Operation successful!');
       onClose();
     } catch (error) {
       console.error('Error:', error);
@@ -86,12 +84,12 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
         {/* Modal Header */}
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-[#1A1C1E]">File Upload Successful</h2>
-          <p className="text-gray-600 text-sm mt-1">Please choose to add to existing chapter or create new chapter</p>
+          <p className="text-gray-600 text-sm mt-1">Please choose to add to existing topic or create new topic</p>
         </div>
 
         {/* Modal Content */}
         <div className="p-6 space-y-6">
-          {/* Select Existing Chapter */}
+          {/* Select Existing Topic */}
           <div className="space-y-3">
             <label className="inline-flex items-center">
               <input
@@ -100,29 +98,29 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
                 onChange={() => setMode('existing')}
                 className="w-4 h-4 text-[#F97316] focus:ring-[#F97316] border-gray-300"
               />
-              <span className="ml-2 text-[#1A1C1E] font-medium">Add to Existing Chapter</span>
+              <span className="ml-2 text-[#1A1C1E] font-medium">Add to Existing Topic</span>
             </label>
 
             {mode === 'existing' && (
               <select
-                value={selectedChapterId}
-                onChange={e => setSelectedChapterId(e.target.value)}
+                value={selectedTopicId}
+                onChange={e => setSelectedTopicId(e.target.value)}
                 className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg
                          text-gray-700 text-sm focus:ring-2 focus:ring-[#F97316]/20 
                          focus:border-[#F97316] hover:border-[#F97316]
                          transition-colors duration-200">
-                <option value="">Select chapter...</option>
-                {Array.isArray(chapters) &&
-                  chapters.map(chapter => (
-                    <option key={chapter.id} value={chapter.id}>
-                      {chapter.name}
+                <option value="">Select Topic...</option>
+                {Array.isArray(topics) &&
+                  topics.map(topic => (
+                    <option key={topic.id} value={topic.id}>
+                      {topic.name}
                     </option>
                   ))}
               </select>
             )}
           </div>
 
-          {/* Create New Chapter */}
+          {/* Create New Topic */}
           <div className="space-y-3">
             <label className="inline-flex items-center">
               <input
@@ -131,15 +129,15 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
                 onChange={() => setMode('new')}
                 className="w-4 h-4 text-[#F97316] focus:ring-[#F97316] border-gray-300"
               />
-              <span className="ml-2 text-[#1A1C1E] font-medium">Create New Chapter</span>
+              <span className="ml-2 text-[#1A1C1E] font-medium">Create New Topic</span>
             </label>
 
             {mode === 'new' && (
               <input
                 type="text"
-                value={newChapterName}
-                onChange={e => setNewChapterName(e.target.value)}
-                placeholder="Enter chapter name"
+                value={newTopicName}
+                onChange={e => setNewTopicName(e.target.value)}
+                placeholder="Enter topic name"
                 className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg
                          text-gray-700 text-sm focus:ring-2 focus:ring-[#F97316]/20
                          focus:border-[#F97316] hover:border-[#F97316]
@@ -161,7 +159,7 @@ export function UploadSuccessModal({ isOpen, onClose, fileId }: UploadSuccessMod
           <button
             onClick={handleSubmit}
             disabled={
-              isSubmitting || (mode === 'existing' && !selectedChapterId) || (mode === 'new' && !newChapterName)
+              isSubmitting || (mode === 'existing' && !selectedTopicId) || (mode === 'new' && !newTopicName)
             }
             className="px-4 py-2.5 bg-[#F97316] text-white rounded-lg text-sm font-medium
                      hover:bg-[#EA580C] transition-colors duration-200 shadow-sm

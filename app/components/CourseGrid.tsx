@@ -7,7 +7,6 @@ import { LoginButton } from './LoginButton';
 
 async function getTopics(email: string) {
   try {
-    console.log('email', email);
     await connect();
     // Find user and their topic IDs
     const user = await User.findOne({ email })
@@ -17,12 +16,10 @@ async function getTopics(email: string) {
     if (!topicIds.length) {
       return [];
     }
-    console.log('topicIds', topicIds);
     // Fetch full topic details for all user's topics
     const topics = await TopicModel.find({
       _id: { $in: topicIds },
     }).lean();
-    console.log('topics', topics);
     return topics.map(topic => JSON.parse(JSON.stringify(topic)));
   } catch (error) {
     console.error('Error fetching topics:', error);
