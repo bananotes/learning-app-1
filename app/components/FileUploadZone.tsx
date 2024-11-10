@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { UploadSuccessModal } from './UploadSuccessModal';
 import { IChapter } from '../models/Chapter';
 
@@ -15,6 +15,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [uploadedFileId, setUploadedFileId] = useState('');
   const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -34,6 +35,11 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
     if (file) {
       await handleFileUpload(file);
     }
+  };
+
+  const handleAddChapter = () => {
+    if (isUploading) return;
+    fileInputRef.current?.click();
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +81,10 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       alert('Upload failed, please try again');
     } finally {
       setIsUploading(false);
+      // Clear the input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -85,13 +95,15 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           className={`
             relative border-2 border-dashed rounded-lg p-8
             flex flex-col items-center justify-center
+            cursor-pointer
             min-h-[300px] bg-white
             ${isDragging ? 'border-[#F97316]' : 'border-gray-300'}
           `}
+          onClick={handleAddChapter}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}>
-          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" />
+          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading} />
 
           <div className="text-center">
             <div className="mb-4">

@@ -28,7 +28,10 @@ export async function POST(
       return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     }
     const rawReqData = await req.text();
-    const newChapterData = JSON.parse(rawReqData);
+    let newChapterData = JSON.parse(rawReqData);
+    if (typeof newChapterData === 'string') {
+      newChapterData = JSON.parse(newChapterData);
+    }
     const chapter = new Chapter({
       name: newChapterData.name,
       summary: newChapterData.summary,
