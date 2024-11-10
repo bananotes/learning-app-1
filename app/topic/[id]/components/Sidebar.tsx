@@ -249,9 +249,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
               ${showLevelCard ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
               delay-100
             `}>
-            <div className="w-12 h-12 rounded-xl overflow-hidden ring-2 ring-white shadow-md">
-              <img src="/images/avatar-placeholder.png" alt="User avatar" className="w-full h-full object-cover" />
-            </div>
             <div className="flex-1">
               <h3 className="text-lg font-medium text-gray-900">Lvl 1: Noob</h3>
               <p className="text-xs text-gray-500">Keep learning to level up!</p>

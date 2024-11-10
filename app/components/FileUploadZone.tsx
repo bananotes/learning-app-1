@@ -44,7 +44,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
   const handleAddChapter = () => {
     if (isUploading) return;
-    if (!session?.user && location.hostname !== 'localhost') {
+    if (!session?.user) {
       console.log('toast,here');
       toast({
         title: 'Not logged in',
@@ -118,7 +118,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}>
-          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading || (!session?.user && location.hostname !== 'localhost')} />
+          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading || (!session?.user)} />
 
           <div className="text-center">
             <div className="mb-4">
