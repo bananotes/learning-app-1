@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { UploadSuccessModal } from './UploadSuccessModal';
 import { IChapter } from '../models/Chapter';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   onUploadSuccess?: (file: { id: string; filename: string; url: string }) => void;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function FileUploadZone({ onUploadSuccess }: Props) {
+  const { data: session } = useSession();
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -103,7 +105,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}>
-          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading} />
+          <input type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} id="fileInput" ref={fileInputRef} disabled={isUploading || !session?.user} />
 
           <div className="text-center">
             <div className="mb-4">
