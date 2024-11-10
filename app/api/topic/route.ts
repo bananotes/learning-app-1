@@ -22,6 +22,7 @@ export async function POST(
     }
     await connect();
     const topicData = await request.json();
+    console.log('Topic data:', topicData);
     const topic = new Topic({
       name: topicData.name,
       summary: topicData.summary,
@@ -34,11 +35,12 @@ export async function POST(
       { email },
       { $push: { topics: savedTopic._id } }
     );
+    const newChapterData = JSON.parse(topicData.chapters[0]);
     const chapter = new Chapter({
-      name: topicData.chapters[0].name,
-      summary: topicData.chapters[0].summary,
+      name: newChapterData.name,
+      summary: newChapterData.summary,
       topicId: savedTopic._id,
-      cards: topicData.chapters[0].cards || {},
+      cards: newChapterData.cards || [],
     });
     const savedChapter = await chapter.save();
     // Update topic's chapters array

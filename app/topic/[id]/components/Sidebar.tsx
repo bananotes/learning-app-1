@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import ChapterList from './ChapterList';
 import { UploadSuccessModal } from '@/app/components/UploadSuccessModal';
+import { IChapter } from '@/app/models/Chapter';
 
 interface Course {
   id: string;
@@ -28,6 +29,7 @@ interface SidebarProps {
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedFileId, setUploadedFileId] = useState<string>('');
+  const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddChapter = () => {
@@ -42,7 +44,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
     formData.append('file', file);
 
     try {
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/import-ai', {
         method: 'POST',
         body: formData,
       });
@@ -51,6 +53,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       const data = await response.json();
       setUploadedFileId(data.fileId);
+      setNewChapterData(data);
       setIsModalOpen(true);
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -125,7 +128,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         onDelete={handleDeleteChapter}
       />
 
-      <UploadSuccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} fileId={uploadedFileId} />
+      <UploadSuccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} fileId={uploadedFileId} newChapterData={newChapterData} allowNewTopic={false} />
     </aside>
   );
 }

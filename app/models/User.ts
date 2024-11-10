@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import './Topic';
 
 export interface IUser {
   name: string;

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { IChapter } from '../models/Chapter';
 
 interface Topic {
   id: string;
@@ -11,9 +12,11 @@ interface UploadSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
   fileId: string;
+  allowNewTopic: boolean;
+  newChapterData?: Pick<IChapter, 'name' | 'summary' | 'cards'>;
 }
 
-export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps) {
+export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterData }: UploadSuccessModalProps) {
   const [mode, setMode] = useState<'existing' | 'new'>('existing');
   const [selectedTopicId, setSelectedTopicId] = useState('');
   const [newTopicName, setNewTopicName] = useState('');
@@ -48,11 +51,7 @@ export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps)
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            name: 'New Chapter',
-            summary: 'New chapter!!!!',
-            cards: [{ id: 'dadfaf', question: 'Front', answer: 'Back' }, { id: 'dadffdaaf', question: 'Fronfdafast', answer: 'fafaBack' }],
-          }),
+          body: JSON.stringify(newChapterData),
         });
 
         if (!response.ok) throw new Error('Failed to add new chapter to topic');
@@ -65,12 +64,8 @@ export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps)
           },
           body: JSON.stringify({
             name: newTopicName,
-            summary: 'New topic!!!!',
-            chapters: [{
-              name: 'New Chapter',
-              summary: 'New chapter!!!!',
-              cards: [{ id: 'dadfaf', question: 'Front', answer: 'Back' }, { id: 'dadffdaaf', question: 'Fronfdafast', answer: 'fafaBack' }],
-            }],
+            summary: newTopicName,
+            chapters: [newChapterData],
           }),
         });
 
@@ -130,7 +125,7 @@ export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps)
           </div>
 
           {/* Create New Topic */}
-          <div className="space-y-3">
+          {allowNewTopic && (<div className="space-y-3">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -153,7 +148,7 @@ export function UploadSuccessModal({ isOpen, onClose }: UploadSuccessModalProps)
                          transition-colors duration-200"
               />
             )}
-          </div>
+          </div>)}
         </div>
 
         {/* Modal Footer */}

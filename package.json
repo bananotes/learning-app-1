@@ -11,8 +11,10 @@
     "init-db": "ts-node scripts/init-db.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.56",
     "@auth/mongodb-adapter": "^3.7.3",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "ai": "^3.4.33",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.456.0",

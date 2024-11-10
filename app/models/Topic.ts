@@ -13,7 +13,7 @@ export interface ITopic {
 const topicSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    summary: { type: String, required: true },
+    summary: { type: String, required: false },
     chapters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chapter' }],
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   },

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { UploadSuccessModal } from './UploadSuccessModal';
+import { IChapter } from '../models/Chapter';
 
 interface Props {
   onUploadSuccess?: (file: { id: string; filename: string; url: string }) => void;
@@ -14,6 +15,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [uploadedFileId, setUploadedFileId] = useState('');
+  const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -55,7 +57,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/import', {
+      const response = await fetch('/api/import-ai', {
         method: 'POST',
         body: formData,
       });
@@ -67,6 +69,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       const data = await response.json();
       setUploadProgress(100);
       setUploadedFileId(data.id);
+      setNewChapterData(data);
       setShowSuccessModal(true);
 
       onUploadSuccess?.(data);
@@ -108,14 +111,6 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
             <label htmlFor="fileInput" className="cursor-pointer text-[#F97316] hover:text-[#EA580C]">
               click to upload
             </label>
-            <button
-              className="ml-4 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-              onClick={() => {
-                setUploadedFileId('test-file-id');
-                setShowSuccessModal(true);
-              }}>
-              Test Upload Success
-            </button>
           </div>
 
           {isUploading && (
@@ -136,6 +131,8 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           location.reload();
         }}
         fileId={uploadedFileId}
+        allowNewTopic={true}
+        newChapterData={newChapterData}
       />
     </>
   );
