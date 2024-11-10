@@ -70,9 +70,10 @@ export default function TopicContent({ course }: TopicContentProps) {
       <div
         className={`
           fixed md:relative z-40
-          transition-transform duration-300 ease-in-out
+          transition-all duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           md:translate-x-0
+          h-full
         `}>
         <Sidebar course={course} selectedChapterId={selectedChapterId} onChapterSelect={handleChapterSelect} />
       </div>
