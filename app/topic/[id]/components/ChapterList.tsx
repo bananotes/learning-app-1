@@ -1,31 +1,39 @@
 'use client';
 
-import { IChapter } from '@/app/models/Chapter';
 import Link from 'next/link';
 
+interface Chapter {
+  id: string;
+  name: string;
+  cards: {
+    id: string;
+    question: string;
+    answer: string;
+  }[];
+}
+
 interface ChapterListProps {
-  chapters: IChapter[];
+  chapters: Chapter[];
 }
 
 export default function ChapterList({ chapters }: ChapterListProps) {
   return (
-    <div className="space-y-4">
-      {chapters.map((chapter, index) => (
+    <nav className="space-y-2">
+      {chapters.map(chapter => (
         <Link
-          key={chapter._id.toString()}
-          href={`/chapter/${chapter._id.toString()}`}
+          key={chapter.id}
+          href={`/chapter/${chapter.id}`}
           className="block p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium">
-                Chapter {index + 1}: {chapter.name}
-              </h3>
-              <p className="text-sm text-gray-600 mt-1">{chapter.summary}</p>
+              <h3 className="font-medium text-[#1A1C1E]">{chapter.name}</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {chapter.cards.length} {chapter.cards.length === 1 ? 'card' : 'cards'}
+              </p>
             </div>
-            <div className="text-sm text-gray-500">{chapter.cards.length} cards</div>
           </div>
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }
