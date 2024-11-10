@@ -1,12 +1,28 @@
 import TopicModel from '../models/Topic';
 import { TopicCard } from './TopicCard';
 import connect from '@/libs/mongodb';
+import { auth } from '@/libs/auth';
+import User, { IUser } from '../models/User';
+import { LoginButton } from './LoginButton';
 
-async function getTopics() {
+async function getTopics(email: string) {
   try {
+    console.log('email', email);
     await connect();
-    const topics = await TopicModel.find({}).lean();
-
+    // Find user and their topic IDs
+    const user = await User.findOne({ email })
+      .select('topics')
+      .lean();
+    const topicIds = (user as unknown as Partial<IUser>)?.topics || [];
+    if (!topicIds.length) {
+      return [];
+    }
+    console.log('topicIds', topicIds);
+    // Fetch full topic details for all user's topics
+    const topics = await TopicModel.find({
+      _id: { $in: topicIds },
+    }).lean();
+    console.log('topics', topics);
     return topics.map(topic => JSON.parse(JSON.stringify(topic)));
   } catch (error) {
     console.error('Error fetching topics:', error);
@@ -14,15 +30,27 @@ async function getTopics() {
   }
 }
 
-// 移除 'use client' 指令，使其成为服务器组件
 export async function CourseGrid() {
   try {
-    const topics = await getTopics();
+    const session = await auth();
+    let email = session?.user?.email;
+    if (!email) {
+      if (process.env.NODE_ENV === 'development') {
+        email = 'demo@example.com';
+      }
+    }
+    const topics = email ? await getTopics(email) : [];
 
-    if (!topics || topics.length === 0) {
+    if (!email) {
       return (
         <div className="p-4 text-center">
-          <p className="text-gray-500">No topics found in database</p>
+          <LoginButton />
+        </div>
+      );
+    } else if (!topics || topics.length === 0) {
+      return (
+        <div className="p-4 text-center">
+          <p className="text-gray-500">No topics found.</p>
         </div>
       );
     }
