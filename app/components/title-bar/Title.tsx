@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-const fetchTopicName = async (topicId: string) =>{
+const fetchTopicName = async (topicId: string) => {
   if (topicId) {
     try {
       const response = await fetch(`/api/topicName/${topicId}`);
@@ -18,7 +18,7 @@ const fetchTopicName = async (topicId: string) =>{
   }
 };
 
-const DEFAULT_TITLE = 'Welcome to Bananotes Learning';
+const DEFAULT_TITLE = 'Flipping World';
 
 const Title: FC = () => {
   const params = useParams();
@@ -27,7 +27,7 @@ const Title: FC = () => {
   const isInTopicPage = pathname.includes('/topic/');
   useEffect(() => {
     if (isInTopicPage) {
-      fetchTopicName(params.id as string).then((name) => {
+      fetchTopicName(params.id as string).then(name => {
         if (name) setTopicName(name);
         else setTopicName(DEFAULT_TITLE);
       });
@@ -37,10 +37,7 @@ const Title: FC = () => {
   }, [isInTopicPage, params.id]);
 
   return (
-    <Link 
-      href={params?.id ? `/topic/${params.id}` : '/'}
-      className="text-xl font-semibold hover:text-blue-600"
-    >
+    <Link href={params?.id ? `/topic/${params.id}` : '/'} className="text-xl font-semibold hover:text-blue-600">
       {topicName}
     </Link>
   );
