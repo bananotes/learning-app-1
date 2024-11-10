@@ -75,6 +75,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
       fileInputRef.current.value = '';
     }
     setIsUploading(false);
+    location.reload();
   };
 
   const handleRenameChapter = async (chapterId: string, newName: string) => {
