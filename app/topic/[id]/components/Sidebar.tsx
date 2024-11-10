@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import ChapterList from './ChapterList';
 import { useParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
@@ -31,40 +31,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const [opacity, setOpacity] = useState(0.6); // 初始透明度为 0.6
-  const [showLevelCard, setShowLevelCard] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    const handleScroll = (e: Event) => {
-      const target = e.target as HTMLElement;
-      const scrollPosition = target.scrollTop;
-      const maxScroll = target.scrollHeight - target.clientHeight;
-
-      // 当滚动到底部时隐藏等级区域
-      setShowLevelCard(scrollPosition < maxScroll - 10);
-
-      // 计算透明度
-      const newOpacity = Math.min(0.95, 0.6 + (scrollPosition / maxScroll) * 0.35);
-      setOpacity(newOpacity);
-    };
-
-    // 初始化检查窗口大小
-    handleResize();
-
-    const sidebarElement = document.querySelector('.sidebar-container');
-    sidebarElement?.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      sidebarElement?.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const handleAddChapter = () => {
     if (isUploading) return;
@@ -189,13 +155,43 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
   return (
     <aside
-      className={`
-        sidebar-container h-full bg-white border-r-2 border-gray-200/80 
-        overflow-y-auto shadow-[inset_-1px_0_0_rgba(0,0,0,0.05)] flex flex-col relative
-        ${isMobile ? 'w-[calc(100vw-32px)] max-w-[320px]' : 'w-80'}
-      `}>
-      <div className="flex-1 p-6 pb-32">
-        <div className="mb-8 text-center">
+      className="sidebar-container h-full bg-white border-r-2 border-gray-200/80 
+      overflow-y-auto shadow-[inset_-1px_0_0_rgba(0,0,0,0.05)] flex flex-col relative w-80">
+      {/* Level card at top */}
+      <div className="sticky top-0 bg-white z-10 p-4 border-b border-gray-100">
+        <div className="rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+          <div className="p-4 space-y-4">
+            {/* Level badge with number */}
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F97316] to-[#FDBA74] 
+                flex items-center justify-center text-white font-bold text-xl shadow-md">
+                1
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-medium text-gray-900">Lvl 1: Noob</h3>
+                <p className="text-xs text-gray-500">Keep learning to level up!</p>
+              </div>
+            </div>
+
+            {/* Experience bar */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center text-xs text-gray-600">
+                <span>Experience</span>
+                <span>0 / 50 XP</span>
+              </div>
+              <div className="w-full bg-gray-200/70 rounded-lg h-2.5 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-[#F97316] to-[#FDBA74] h-full rounded-lg 
+                    transition-all duration-300 ease-out"
+                  style={{ width: '0%' }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-8 text-center mt-4">
           <p className="text-sm text-gray-600">
             {course.chapters.length} {course.chapters.length === 1 ? 'Chapter' : 'Chapters'}
           </p>
@@ -208,13 +204,16 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
           disabled={isUploading}
           className={`w-full mb-4 px-4 py-2 text-sm border rounded-lg
             ${
-    isUploading
-      ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
-      : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
-    }`}>
+              isUploading
+                ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
+                : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
+            }`}>
           {isUploading ? 'Adding Chapter...' : '+ Add Chapter'}
         </button>
+      </div>
 
+      {/* Chapter content */}
+      <div className="flex-1 p-6">
         <ChapterList
           chapters={course.chapters}
           selectedChapterId={selectedChapterId}
@@ -223,52 +222,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
           onDelete={handleDeleteChapter}
         />
       </div>
-
-      {showLevelCard && (
-        <div
-          className={`
-            fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-72 rounded-2xl 
-            shadow-lg border border-gray-200/50 p-4
-            transition-all duration-500 ease-in-out backdrop-blur-sm
-            ${isMobile ? '' : 'md:left-[160px]'}
-            transform-gpu
-            ${
-        showLevelCard
-          ? 'opacity-100 translate-y-0 scale-100'
-          : 'opacity-0 translate-y-8 scale-95 pointer-events-none'
-        }
-          `}
-          style={{
-            backgroundColor: `rgba(255, 255, 255, ${opacity})`,
-            transformOrigin: 'bottom',
-          }}>
-          <div
-            className={`
-              flex items-center gap-3 p-3 bg-white/80 rounded-xl border border-gray-100 shadow-sm
-              transition-all duration-500 ease-out
-              ${showLevelCard ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-              delay-100
-            `}>
-            <div className="flex-1">
-              <h3 className="text-lg font-medium text-gray-900">Lvl 1: Noob</h3>
-              <p className="text-xs text-gray-500">Keep learning to level up!</p>
-            </div>
-          </div>
-
-          <div className="mt-3 space-y-1.5 p-3 bg-white/80 rounded-xl border border-gray-100 shadow-sm">
-            <div className="flex justify-between items-center text-xs text-gray-600">
-              <span>Experience</span>
-              <span>0 / 50 XP</span>
-            </div>
-            <div className="w-full bg-gray-200/70 rounded-lg h-2.5 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-lg transition-all duration-300 ease-out"
-                style={{ width: `${(0 / 50) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </aside>
   );
 }
