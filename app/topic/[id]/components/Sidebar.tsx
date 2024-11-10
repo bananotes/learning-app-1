@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import ChapterList from './ChapterList';
 import { useParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 interface Course {
   id: string;
@@ -29,6 +30,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
   const { id: selectedTopicId } = useParams();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const handleAddChapter = () => {
     if (isUploading) return;
@@ -61,10 +63,27 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         body: data,
       });
       setIsUploading(false);
-      if (!updateResponse.ok) throw new Error('Failed to add new chapter to topic');
+      
+      if (!updateResponse.ok) {
+        throw new Error('Failed to add new chapter to topic');
+      }
+      
+      toast({
+        title: 'Success!',
+        description: 'New chapter has been added to your topic.',
+        variant: 'default',
+        className: 'bg-[#F97316] text-white',
+        duration: 3000,
+      });
+
     } catch (error) {
       console.error('Error uploading file:', error);
-      alert('Failed to upload file. Please try again.');
+      toast({
+        title: 'Error',
+        description: 'Failed to upload file. Please try again.',
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
 
     // Clear the input

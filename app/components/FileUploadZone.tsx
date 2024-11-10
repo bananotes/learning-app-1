@@ -117,9 +117,9 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
               </svg>
             </div>
             <p className="text-gray-600 mb-2">Drag and drop PDF file here or</p>
-            <label htmlFor="fileInput" className="cursor-pointer text-[#F97316] hover:text-[#EA580C]">
+            <p className="cursor-pointer text-[#F97316] hover:text-[#EA580C]">
               click to upload
-            </label>
+            </p>
           </div>
 
           {isUploading && (
