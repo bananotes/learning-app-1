@@ -7,7 +7,7 @@ const Logo: FC = () => {
   return (
     <Link href="/" className="flex items-center">
       <Image 
-        src="/logo.svg"
+        src="/logo.png"
         alt="Logo"
         width={32}
         height={32}
