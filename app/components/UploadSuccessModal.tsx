@@ -57,6 +57,7 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
         });
 
         if (!response.ok) throw new Error('Failed to add new chapter to topic');
+        router.push(`/topic/${selectedTopicId}`);
       } else {
         // Create new topic and add file
         const response = await fetch('/api/topic', {
