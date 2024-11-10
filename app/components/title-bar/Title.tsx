@@ -25,8 +25,7 @@ const Title: FC = () => {
   const params = useParams();
   const pathname = usePathname();
   const [topicName, setTopicName] = useState('');
-  const isInTopicPage = pathname.includes('/course/');
-  console.log('isInTopicPage', isInTopicPage);
+  const isInTopicPage = pathname.includes('/topic/');
   useEffect(() => {
     if (isInTopicPage) {
       fetchTopicName(params.id as string).then((name) => {
@@ -38,7 +37,7 @@ const Title: FC = () => {
 
   return (
     <Link 
-      href={params?.topicId ? `/topics/${params.topicId}` : '/'}
+      href={params?.id ? `/topic/${params.id}` : '/'}
       className="text-xl font-semibold hover:text-blue-600"
     >
       {topicName}
