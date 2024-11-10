@@ -23,7 +23,9 @@ async function getTopicWithChapters(id: string): Promise<ITopicWithChapters | nu
 
 export default async function TopicPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
   const topic = await getTopicWithChapters(id);
+
   const courseData = {
     id: topic!._id,
     name: topic!.name,
@@ -44,11 +46,12 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-[#1A1C1E]">{topic!.name}</h1>
               <div className="flex gap-2">
+                {/* TODO: Implement Add Card functionality in the future
                 <button
                   className="px-4 py-2 text-sm bg-[#F97316] text-white rounded-lg 
                                  hover:bg-[#EA580C] transition-colors duration-200">
                   Add Card
-                </button>
+                </button> */}
               </div>
             </div>
             <p className="text-gray-600 mt-2">{topic!.summary}</p>
