@@ -45,7 +45,7 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
     setIsSubmitting(true);
     try {
       if (mode === 'existing') {
-        // TODO: Add to existing topic
+        // Add to existing topic
         const response = await fetch(`/api/topic/${selectedTopicId}/chapter`, {
           method: 'POST',
           headers: {
@@ -56,7 +56,7 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
 
         if (!response.ok) throw new Error('Failed to add new chapter to topic');
       } else {
-        // TODO: Create new topic and add file
+        // Create new topic and add file
         const response = await fetch('/api/topic', {
           method: 'POST',
           headers: {

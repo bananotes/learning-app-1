@@ -12,7 +12,6 @@ interface Props {
 export function FileUploadZone({ onUploadSuccess }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [uploadedFileId, setUploadedFileId] = useState('');
   const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
@@ -51,7 +50,6 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
     }
 
     setIsUploading(true);
-    setUploadProgress(0);
 
     try {
       const formData = new FormData();
@@ -67,7 +65,6 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       }
 
       const data = await response.json();
-      setUploadProgress(100);
       setUploadedFileId(data.id);
       setNewChapterData(data);
       setShowSuccessModal(true);
@@ -115,10 +112,11 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
           {isUploading && (
             <div className="absolute bottom-4 left-4 right-4">
-              <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
-                <div className="bg-[#F97316] h-1.5 rounded-full" style={{ width: `${uploadProgress}%` }} />
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div 
+                  className="h-1.5 rounded-full bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 animate-gradient-x bg-[length:200%_100%]"
+                />
               </div>
-              <div className="text-sm text-gray-500 text-right">{uploadProgress}%</div>
             </div>
           )}
         </div>

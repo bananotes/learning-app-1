@@ -2,8 +2,8 @@
 
 import { useState, useRef } from 'react';
 import ChapterList from './ChapterList';
-import { UploadSuccessModal } from '@/app/components/UploadSuccessModal';
 import { IChapter } from '@/app/models/Chapter';
+import { useParams } from 'next/navigation';
 
 interface Course {
   id: string;
@@ -27,16 +27,18 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [uploadedFileId, setUploadedFileId] = useState<string>('');
+  const { id: selectedTopicId } = useParams();
   const [newChapterData, setNewChapterData] = useState<Pick<IChapter, 'name' | 'summary' | 'cards'>>();
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddChapter = () => {
+    if (isUploading) return;
     fileInputRef.current?.click();
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUploading(true);
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -52,9 +54,17 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
       if (!response.ok) throw new Error('Upload failed');
 
       const data = await response.json();
-      setUploadedFileId(data.fileId);
       setNewChapterData(data);
-      setIsModalOpen(true);
+      // Add to existing topic
+      const updateResponse = await fetch(`/api/topic/${selectedTopicId}/chapter`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newChapterData),
+      });
+      setIsUploading(false);
+      if (!updateResponse.ok) throw new Error('Failed to add new chapter to topic');
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload file. Please try again.');
@@ -64,6 +74,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+    setIsUploading(false);
   };
 
   const handleRenameChapter = async (chapterId: string, newName: string) => {
@@ -115,9 +126,14 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       <button
         onClick={handleAddChapter}
-        className="w-full mb-4 px-4 py-2 text-sm text-[#F97316] border border-[#F97316] 
-                   rounded-lg hover:bg-[#F97316]/5 transition-colors duration-200">
-        + Add Chapter
+        disabled={isUploading}
+        className={`w-full mb-4 px-4 py-2 text-sm border rounded-lg
+    ${isUploading 
+      ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse' 
+      : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
+    }`}
+      >
+        {isUploading ? 'Adding Chapter...' : '+ Add Chapter'}
       </button>
 
       <ChapterList
@@ -127,8 +143,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         onRename={handleRenameChapter}
         onDelete={handleDeleteChapter}
       />
-
-      <UploadSuccessModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} fileId={uploadedFileId} newChapterData={newChapterData} allowNewTopic={false} />
     </aside>
   );
 }
