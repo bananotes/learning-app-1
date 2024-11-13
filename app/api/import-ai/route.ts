@@ -2,6 +2,7 @@ import { auth } from '@/libs/auth';
 import { NextResponse } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateText } from 'ai';
+import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/libs/config';
 
 export const maxDuration = 120; // This function can run for a maximum of 5 seconds
 export const runtime = 'nodejs';
@@ -27,6 +28,13 @@ export const POST = auth(async function POST(req) {
 
     // Check if uploadedFile is of type File
     if (uploadedFile instanceof File) {
+      // Check file size
+      if (uploadedFile.size > FILE_SIZE_LIMIT) {
+        return NextResponse.json(
+          { error: `File size exceeds ${FILE_SIZE_LIMIT_WORDING} limit` },
+          { status: 413 }
+        );
+      }
       // Convert ArrayBuffer to Buffer
       const fileBuffer = Buffer.from(await uploadedFile.arrayBuffer());
       console.log('File buffer:', fileBuffer);

@@ -5,8 +5,8 @@ import { Toaster } from '@/app/components/ui/toaster';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Learning Demo App',
-  description: 'save your mid-term grade',
+  title: 'Flipping World',
+  description: 'Flipping World',
 };
 
 export default function RootLayout({

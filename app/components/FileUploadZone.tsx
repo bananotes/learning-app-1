@@ -5,6 +5,7 @@ import { UploadSuccessModal } from './UploadSuccessModal';
 import { IChapter } from '../models/Chapter';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
+import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/libs/config';
 
 interface Props {
   onUploadSuccess?: (file: { id: string; filename: string; url: string }) => void;
@@ -66,7 +67,23 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
   const handleFileUpload = async (file: File) => {
     if (file.type !== 'application/pdf') {
-      alert('Please upload a PDF file');
+      toast({
+        title: 'Invalid file type',
+        description: 'Please upload a PDF file',
+        variant: 'destructive',
+        duration: 3000,
+      });
+      return;
+    }
+  
+    // Check file size 
+    if (file.size > FILE_SIZE_LIMIT) {
+      toast({
+        title: 'File too large',
+        description: `Please upload a file smaller than ${FILE_SIZE_LIMIT_WORDING}`,
+        variant: 'destructive',
+        duration: 3000,
+      });
       return;
     }
 
